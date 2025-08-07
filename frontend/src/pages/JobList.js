@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Typography, Space, message } from 'antd';
+import { Table, Button, Typography, Space, message, Modal } from 'antd';
 import api from '../services/api';
 import JobFormModal from '../components/JobFormModal';
+import NodeDetailsModal from '../components/NodeDetailsModal';
 
 const { Title } = Typography;
 
 const JobList = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isFormModalVisible, setIsFormModalVisible] = useState(false);
+    const [isDetailsModalVisible, setIsDetailsModalVisible] = useState(false);
+    const [selectedJobDetails, setSelectedJobDetails] = useState(null);
+    const [editingJob, setEditingJob] = useState(null);
 
     const fetchJobs = async () => {
         setLoading(true);
@@ -27,15 +31,62 @@ const JobList = () => {
         fetchJobs();
     }, []);
 
-    const handleCreate = async (values) => {
+    const handleFormFinish = async (values) => {
+        const jobData = {
+            ...values,
+            // Ensure successorJobNames is an array even if undefined
+            successorJobNames: values.successorJobNames || [],
+        };
+
         try {
-            await api.createJob(values);
-            setIsModalVisible(false);
-            message.success('Job created successfully!');
+            if (editingJob) {
+                await api.updateJob(editingJob.id, jobData);
+                message.success('Job updated successfully!');
+            } else {
+                await api.createJob(jobData);
+                message.success('Job created successfully!');
+            }
+            setIsFormModalVisible(false);
+            setEditingJob(null);
             fetchJobs(); // Refresh the list
         } catch (error) {
             message.error('Failed to create job.');
             console.error('Failed to create job:', error);
+        }
+    };
+
+    const handleDelete = (jobId) => {
+        Modal.confirm({
+            title: 'Are you sure you want to delete this job?',
+            content: 'This action cannot be undone.',
+            okText: 'Yes, Delete',
+            okType: 'danger',
+            onOk: async () => {
+                try {
+                    await api.deleteJob(jobId);
+                    message.success('Job deleted successfully!');
+                    fetchJobs(); // Refresh the list
+                } catch (error) {
+                    message.error(error.response?.data?.error || 'Failed to delete job.');
+                    console.error('Failed to delete job:', error);
+                }
+            },
+        });
+    };
+
+    const showEditModal = (job) => {
+        setEditingJob(job);
+        setIsFormModalVisible(true);
+    };
+
+    const handleViewDetails = async (jobId) => {
+        try {
+            const response = await api.getJobById(jobId);
+            setSelectedJobDetails(response.data);
+            setIsDetailsModalVisible(true);
+        } catch (error) {
+            message.error('Failed to fetch job details.');
+            console.error('Failed to fetch job details:', error);
         }
     };
 
@@ -65,9 +116,15 @@ const JobList = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button type="link">View Details</Button>
-                    <Button type="link">Edit</Button>
-                    <Button type="link">Delete</Button>
+                    <Button type="link" onClick={() => handleViewDetails(record.id)}>
+                        View Details
+                    </Button>
+                    <Button type="link" onClick={() => showEditModal(record)}>
+                        Edit
+                    </Button>
+                    <Button type="link" danger onClick={() => handleDelete(record.id)}>
+                        Delete
+                    </Button>
                 </Space>
             ),
         },
@@ -79,7 +136,7 @@ const JobList = () => {
             <Button
                 type="primary"
                 style={{ marginBottom: 16 }}
-                onClick={() => setIsModalVisible(true)}
+                onClick={() => setIsFormModalVisible(true)}
             >
                 Create Job
             </Button>
@@ -90,10 +147,21 @@ const JobList = () => {
                 rowKey="id"
             />
             <JobFormModal
-                open={isModalVisible}
-                onCancel={() => setIsModalVisible(false)}
-                onFinish={handleCreate}
+                open={isFormModalVisible}
+                onCancel={() => {
+                    setIsFormModalVisible(false);
+                    setEditingJob(null);
+                }}
+                onFinish={handleFormFinish}
+                job={editingJob}
             />
+            {selectedJobDetails && (
+                <NodeDetailsModal
+                    open={isDetailsModalVisible}
+                    onCancel={() => setIsDetailsModalVisible(false)}
+                    nodeData={selectedJobDetails}
+                />
+            )}
         </div>
     );
 };
