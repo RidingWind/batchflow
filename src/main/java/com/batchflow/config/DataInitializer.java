@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.HashSet;
 
 @Component
 public class DataInitializer implements CommandLineRunner {

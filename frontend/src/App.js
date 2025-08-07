@@ -8,37 +8,32 @@ import './App.css';
 
 const { Header, Content } = Layout;
 
-
-function getItem(label, key, icon) {
-  return {
-    key,
-    icon,
-    label,
-  }
-}
-const items = [
-  getItem('Job List', '1'),
-  getItem('Workflow Graph', '2'),
-]
-
 function App() {
+  const menuItems = [
+    {
+      key: '1',
+      label: <Link to="/">Job List</Link>,
+    },
+    {
+      key: '2',
+      label: <Link to="/graph">Workflow Graph</Link>,
+    },
+  ];
+
   return (
-    <Router>
-      <Layout style={{ minHeight: '100vh' }}>
-        <Header>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1"><Link to="/">Job List</Link></Menu.Item>
-            <Menu.Item key="2"><Link to="/graph">Workflow Graph</Link></Menu.Item>
-          </Menu>
-        </Header>
-        <Content style={{ padding: '50px' }}>
-          <Routes>
-            <Route path="/" element={<JobList />} />
-            <Route path="/graph" element={<GraphViewer />} />
-          </Routes>
-        </Content>
-      </Layout>
-    </Router>
+      <Router>
+        <Layout style={{ minHeight: '100vh' }}>
+          <Header>
+            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
+          </Header>
+          <Content style={{ padding: '50px' }}>
+            <Routes>
+              <Route path="/" element={<JobList />} />
+              <Route path="/graph" element={<GraphViewer />} />
+            </Routes>
+          </Content>
+        </Layout>
+      </Router>
   );
 }
 
