@@ -27,7 +27,7 @@ const GraphViewer = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedNodeData, setSelectedNodeData] = useState(null);
 
-    const handleStatusUpdate = (jobDto) => {
+    const handleStatusUpdate = useCallback((jobDto) => {
         console.log('Received status update:', jobDto);
         setElements(prevElements =>
             prevElements.map(el => {
@@ -38,7 +38,7 @@ const GraphViewer = () => {
                 return el;
             })
         );
-    };
+    }, []); // Empty dependency array means this function is created once
 
     useWebSocket('/topic/job-status', handleStatusUpdate);
 

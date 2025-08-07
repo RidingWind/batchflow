@@ -21,19 +21,19 @@ function App() {
   ];
 
   return (
-      <Router>
-        <Layout style={{ minHeight: '100vh' }}>
-          <Header>
-            <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
-          </Header>
-          <Content style={{ padding: '50px' }}>
-            <Routes>
-              <Route path="/" element={<JobList />} />
-              <Route path="/graph" element={<GraphViewer />} />
-            </Routes>
-          </Content>
-        </Layout>
-      </Router>
+    <Router>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Header>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
+        </Header>
+        <Content style={{ padding: '50px' }}>
+          <Routes>
+            <Route path="/" element={<JobList />} />
+            <Route path="/graph" element={<GraphViewer />} />
+          </Routes>
+        </Content>
+      </Layout>
+    </Router>
   );
 }
 
