@@ -9,14 +9,22 @@ import './App.css';
 const { Header, Content } = Layout;
 
 function App() {
+  const menuItems = [
+    {
+      key: '1',
+      label: <Link to="/">Job List</Link>,
+    },
+    {
+      key: '2',
+      label: <Link to="/graph">Workflow Graph</Link>,
+    },
+  ];
+
   return (
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
         <Header>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1"><Link to="/">Job List</Link></Menu.Item>
-            <Menu.Item key="2"><Link to="/graph">Workflow Graph</Link></Menu.Item>
-          </Menu>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={menuItems} />
         </Header>
         <Content style={{ padding: '50px' }}>
           <Routes>
