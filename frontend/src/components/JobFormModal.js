@@ -38,7 +38,7 @@ const JobFormModal = ({ open, onCancel, onFinish, job }) => {
             };
             fetchPrerequisites();
         }
-    }, [visible]);
+    }, [open, job]);
 
     const handleOk = () => {
         form.validateFields()
