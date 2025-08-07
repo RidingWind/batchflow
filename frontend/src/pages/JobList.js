@@ -51,9 +51,9 @@ const JobList = () => {
             key: 'actions',
             render: (_, record) => (
                 <Space size="middle">
-                    <a>View Details</a>
-                    <a>Edit</a>
-                    <a>Delete</a>
+                    <Button type="link">View Details</Button>
+                    <Button type="link">Edit</Button>
+                    <Button type="link">Delete</Button>
                 </Space>
             ),
         },
