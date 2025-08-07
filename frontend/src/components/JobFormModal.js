@@ -4,13 +4,13 @@ import api from '../services/api';
 
 const { Option } = Select;
 
-const JobFormModal = ({ visible, onCancel, onFinish }) => {
+const JobFormModal = ({ open, onCancel, onFinish }) => {
     const [form] = Form.useForm();
     const [systems, setSystems] = useState([]);
     const [jobs, setJobs] = useState([]);
 
     useEffect(() => {
-        if (visible) {
+        if (open) {
             // Fetch systems and jobs for the select dropdowns
             const fetchPrerequisites = async () => {
                 try {
@@ -41,7 +41,7 @@ const JobFormModal = ({ visible, onCancel, onFinish }) => {
 
     return (
         <Modal
-            visible={visible}
+            open={open}
             title="Create a new Job"
             okText="Create"
             cancelText="Cancel"

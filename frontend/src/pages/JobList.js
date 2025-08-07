@@ -90,7 +90,7 @@ const JobList = () => {
                 rowKey="id"
             />
             <JobFormModal
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 onFinish={handleCreate}
             />

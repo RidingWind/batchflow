@@ -7,7 +7,7 @@ const useWebSocket = (topic, onMessageReceived) => {
 
     useEffect(() => {
         const client = new Client({
-            webSocketFactory: () => new SockJS('/ws'),
+            webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
             onConnect: () => {
                 console.log('WebSocket Connected!');
                 client.subscribe(topic, (message) => {

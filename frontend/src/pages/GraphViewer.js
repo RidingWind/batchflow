@@ -144,7 +144,7 @@ const GraphViewer = () => {
                 cy={(cy) => { cy.on('tap', 'node', handleNodeTap); }}
             />
             <NodeDetailsModal
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 nodeData={selectedNodeData}
             />

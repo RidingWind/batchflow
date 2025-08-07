@@ -4,7 +4,7 @@ import NodeActions from './NodeActions';
 
 const { Title } = Typography;
 
-const NodeDetailsModal = ({ visible, onCancel, nodeData }) => {
+const NodeDetailsModal = ({ open, onCancel, nodeData }) => {
     if (!nodeData) {
         return null;
     }
@@ -60,7 +60,7 @@ const NodeDetailsModal = ({ visible, onCancel, nodeData }) => {
     return (
         <Modal
             title={isJob ? "Job Details" : "System Details"}
-            visible={visible}
+            open={open}
             onCancel={onCancel}
             footer={null}
             width={800}
