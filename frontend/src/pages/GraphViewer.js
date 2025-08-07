@@ -11,8 +11,17 @@ cytoscape.use(dagre);
 
 const { Title } = Typography;
 
+const jobTypeColors = {
+    START_JOB: '#52c41a',
+    CONVERSION: '#1890ff',
+    VALIDATION: '#faad14',
+    REPORT: '#722ed1',
+    DISPATCH_NODE: '#8c8c8c',
+    SYSTEM: '#003a8c'
+};
+
 const statusColors = {
-    IDLE: { bg: '#bfbfbf', text: '#000' },
+    IDLE: { bg: null, text: null }, // Use default type color
     RUNNING: { bg: '#1890ff', text: '#fff' },
     SUCCESS: { bg: '#52c41a', text: '#fff' },
     FAILED: { bg: '#f5222d', text: '#fff' },
@@ -91,12 +100,22 @@ const GraphViewer = () => {
                 'label': 'data(label)',
                 'width': '120px', 'height': '50px', 'shape': 'round-rectangle',
                 'text-valign': 'center', 'text-halign': 'center', 'font-size': '12px',
-                'text-wrap': 'wrap', 'text-max-width': '110px'
+                'text-wrap': 'wrap', 'text-max-width': '110px',
+                'color': 'white', // Default text color
             }
         },
+        // Default coloring by node type
+        ...Object.entries(jobTypeColors).map(([type, color]) => ({
+            selector: `node[type = "${type}"]`,
+            style: { 'background-color': color }
+        })),
+        // Override coloring by status
         ...Object.entries(statusColors).map(([status, colors]) => ({
             selector: `node[status = "${status}"]`,
-            style: { 'background-color': colors.bg, 'color': colors.text }
+            style: {
+                'background-color': colors.bg || (node => jobTypeColors[node.data('type')]),
+                'color': colors.text || 'white',
+            }
         })),
         {
             selector: 'edge',
