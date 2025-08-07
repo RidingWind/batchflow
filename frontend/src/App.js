@@ -26,7 +26,10 @@ function App() {
     <Router>
       <Layout style={{ minHeight: '100vh' }}>
         <Header>
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} items={items} />
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+            <Menu.Item key="1"><Link to="/">Job List</Link></Menu.Item>
+            <Menu.Item key="2"><Link to="/graph">Workflow Graph</Link></Menu.Item>
+          </Menu>
         </Header>
         <Content style={{ padding: '50px' }}>
           <Routes>
