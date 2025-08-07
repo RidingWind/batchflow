@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import '@ant-design/v5-patch-for-react-19';
 
 test('renders learn react link', () => {
   render(<App />);
