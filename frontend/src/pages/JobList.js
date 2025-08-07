@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Typography, Space, message } from 'antd';
 import api from '../services/api';
+import JobFormModal from '../components/JobFormModal';
 
 const { Title } = Typography;
 
 const JobList = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const fetchJobs = async () => {
         setLoading(true);
@@ -24,6 +26,18 @@ const JobList = () => {
     useEffect(() => {
         fetchJobs();
     }, []);
+
+    const handleCreate = async (values) => {
+        try {
+            await api.createJob(values);
+            setIsModalVisible(false);
+            message.success('Job created successfully!');
+            fetchJobs(); // Refresh the list
+        } catch (error) {
+            message.error('Failed to create job.');
+            console.error('Failed to create job:', error);
+        }
+    };
 
     const columns = [
         {
@@ -62,7 +76,11 @@ const JobList = () => {
     return (
         <div>
             <Title level={2}>Job Management</Title>
-            <Button type="primary" style={{ marginBottom: 16 }}>
+            <Button
+                type="primary"
+                style={{ marginBottom: 16 }}
+                onClick={() => setIsModalVisible(true)}
+            >
                 Create Job
             </Button>
             <Table
@@ -70,6 +88,11 @@ const JobList = () => {
                 dataSource={jobs}
                 loading={loading}
                 rowKey="id"
+            />
+            <JobFormModal
+                visible={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                onFinish={handleCreate}
             />
         </div>
     );
