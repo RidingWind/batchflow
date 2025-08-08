@@ -77,14 +77,17 @@ public class JobService {
 
     @Transactional
     public void deleteJob(Long id) {
-        Job job = jobRepository.findById(id)
+        Job jobToDelete = jobRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Job not found with id: " + id));
 
-        if (!job.getPredecessors().isEmpty()) {
-            throw new IllegalStateException("Cannot delete job with id " + id + " because it is a successor (post-key) to other jobs.");
+        // For each job that has jobToDelete as a successor...
+        for (Job predecessor : new HashSet<>(jobToDelete.getPredecessors())) {
+            // ...remove jobToDelete from its list of successors.
+            predecessor.getSuccessors().remove(jobToDelete);
         }
 
-        jobRepository.delete(job);
+        // Now that no one points to jobToDelete, it can be safely deleted.
+        jobRepository.delete(jobToDelete);
     }
 
     @Transactional(readOnly = true)

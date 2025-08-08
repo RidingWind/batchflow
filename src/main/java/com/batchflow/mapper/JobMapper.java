@@ -28,7 +28,7 @@ public class JobMapper {
                 job.getInputs().stream().map(this::toDto).collect(Collectors.toSet()),
                 job.getOutputs().stream().map(this::toDto).collect(Collectors.toSet()),
                 job.getSuccessors().stream().map(Job::getJobName).collect(Collectors.toSet()),
-                job.getPredecessors().stream().map(Job::getJobName).collect(Collectors.toSet())
+                Collections.emptySet() // Avoid lazy loading predecessors
         );
     }
 

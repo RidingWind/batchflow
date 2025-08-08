@@ -16,6 +16,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findBySystemInfoId(Long systemId);
 
     // Eagerly fetch dependencies for the graph visualization
-    @Query("SELECT j FROM Job j LEFT JOIN FETCH j.successors")
+    @Query("SELECT j FROM Job j LEFT JOIN FETCH j.successors LEFT JOIN FETCH j.systemInfo")
     List<Job> findAllWithSuccessors();
 }

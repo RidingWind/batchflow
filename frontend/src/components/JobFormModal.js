@@ -43,7 +43,6 @@ const JobFormModal = ({ open, onCancel, onFinish, job }) => {
     const handleOk = () => {
         form.validateFields()
             .then(values => {
-                form.resetFields();
                 onFinish(values);
             })
             .catch(info => {
